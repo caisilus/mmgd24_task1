@@ -26,15 +26,12 @@ function draw(tFrame) {
         context.rect(r.x, r.y, r.w, r.h)
         context.fill()
     })
-
 }
 
 function update(tick) {
-
     gameState.rects.forEach(r=>{
         r.x += r.vx
         r.y += r.vy
-
     })
 }
 
