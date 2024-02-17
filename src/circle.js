@@ -29,4 +29,17 @@ export default class Circle {
       Math.pow(this.x - circle.x, 2) + Math.pow(this.y - circle.y, 2)
     );
   }
+
+  intersectsWithAxis(axis, maxValue) {
+    if (axis == "x") {
+      return this.x - this.r <= 0 || this.x + this.r >= maxValue
+    }
+
+    return this.y - this.r <= 0 || this.y + this.r >= maxValue
+  }
+
+  updatePosition() {
+    this.x += this.vx
+    this.y += this.vy
+  }
 }

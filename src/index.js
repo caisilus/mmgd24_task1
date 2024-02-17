@@ -5,14 +5,10 @@ import Renderer from "./renderer";
 const canvas = document.getElementById("cnvs");
 
 const gameState = {
-  rects: [
-    // new Rectangle(10,10,20,20, 1, 0),
-    // new Rectangle(500,10,20,20, -1, 0)
-  ],
   circles: [
-    new Circle(10, 100, 15, 1, 0, "blue"),
-    new Circle(510, 100, 15, -1, 0, "red"),
-    new Circle(260, 350, 15, 0, -1, "yellow")
+    new Circle(20, 100, 15, 1, 0, "blue"),
+    new Circle(520, 100, 15, -1, 0, "red"),
+    new Circle(270, 350, 15, 0, -1, "yellow")
   ],
 };
 
@@ -26,28 +22,38 @@ function queueUpdates(numTicks) {
 }
 
 function update(tick) {
-  gameState.rects.forEach((r) => {
-    r.x += r.vx;
-    r.y += r.vy;
-  });
+  gameState.circles.forEach((circle, i) => {
+    circle.updatePosition()
 
-  for (let i = 0; i < gameState.circles.length; i++) {
-    c1 = gameState.circles[i];
+    if (bounceOffWalls(circle)) {
+      return
+    } 
+
     for (let j = 0; j < gameState.circles.length; j++) {
-      if (j == i) continue;
+      other = gameState.circles[j]
+      if (i == j) continue
 
-      c2 = gameState.circles[j];
-
-      if (c1.intersectsWithCircle(c2)) {
-        c1.vx = -c1.vx;
-        c1.vy = -c1.vy;
-        break;
+      if (other.intersectsWithCircle(circle)) {
+        circle.vx *= -1
+        circle.vy *= -1
+        break
       }
     }
+  })
+}
 
-    c1.x += c1.vx;
-    c1.y += c1.vy;
+function bounceOffWalls(collider) {
+  if (collider.intersectsWithAxis("x", canvas.width)) {
+    collider.vx *= -1
+    return true
   }
+
+  if (collider.intersectsWithAxis("y", canvas.height)) {
+    collider.vy *= -1
+    return true
+  }
+  
+  return false
 }
 
 function run(tFrame) {
