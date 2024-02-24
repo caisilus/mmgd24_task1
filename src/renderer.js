@@ -1,8 +1,8 @@
 export default class Renderer {
   constructor(canvas, gameState) {
-    this.canvas = canvas
-    this.context = canvas.getContext("2d")
-    this.gameState = gameState
+    this.canvas = canvas;
+    this.context = canvas.getContext("2d");
+    this.gameState = gameState;
   }
 
   render(tframe) {
@@ -10,7 +10,7 @@ export default class Renderer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.gameState.circles.forEach((circle) => {
-      this.drawCircle(circle)
+      this.drawCircle(circle);
     });
   }
 
@@ -18,9 +18,9 @@ export default class Renderer {
     this.context.beginPath();
     this.context.fillStyle = circle.color;
     this.context.arc(
-      circle.center.x,
-      circle.center.y,
-      circle.radius,
+      circle.collider.center.x,
+      circle.collider.center.y,
+      circle.collider.radius,
       0,
       2 * Math.PI
     );

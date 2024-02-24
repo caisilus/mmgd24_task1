@@ -1,11 +1,10 @@
 export default class Circle {
-  constructor(x, y, r, vx, vy, color = "black") {
+  constructor(x, y, r, vx, vy) {
     this.x = x;
     this.y = y;
     this.r = r;
     this.vx = vx;
     this.vy = vy;
-    this.color = color;
   }
 
   get center() {
@@ -23,6 +22,10 @@ export default class Circle {
     );
   }
 
+  intersects(collider) {
+    return this.intersectsWithCircle(collider);
+  }
+
   intersectsWithCircle(circle) {
     return (
       Math.pow(this.r + circle.r, 2) >=
@@ -32,14 +35,9 @@ export default class Circle {
 
   intersectsWithAxis(axis, maxValue) {
     if (axis == "x") {
-      return this.x - this.r <= 0 || this.x + this.r >= maxValue
+      return this.x - this.r <= 0 || this.x + this.r >= maxValue;
     }
 
-    return this.y - this.r <= 0 || this.y + this.r >= maxValue
-  }
-
-  updatePosition() {
-    this.x += this.vx
-    this.y += this.vy
+    return this.y - this.r <= 0 || this.y + this.r >= maxValue;
   }
 }

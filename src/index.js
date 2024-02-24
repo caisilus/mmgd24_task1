@@ -1,18 +1,21 @@
 import Rectangle from "./rectangle";
 import Circle from "./circle";
 import Renderer from "./renderer";
+import GameObject from "./game-object";
 
 const canvas = document.getElementById("cnvs");
 
 const gameState = {
   circles: [
-    new Circle(20, 100, 15, 1, 0, "blue"),
-    new Circle(520, 100, 15, -1, 0, "red"),
-    new Circle(270, 350, 15, 0, -1, "yellow")
-  ],
+    new Circle(20, 100, 15, 2, 0),
+    new Circle(520, 100, 15, -2, 0),
+    new Circle(270, 350, 15, 0, -2),
+  ].map((circleCollider) => new GameObject(circleCollider, 3)),
+
+  immuneTicks: 20,
 };
 
-const renderer = new Renderer(canvas, gameState)
+const renderer = new Renderer(canvas, gameState);
 
 function queueUpdates(numTicks) {
   for (let i = 0; i < numTicks; i++) {
@@ -22,38 +25,51 @@ function queueUpdates(numTicks) {
 }
 
 function update(tick) {
-  gameState.circles.forEach((circle, i) => {
-    circle.updatePosition()
-
-    if (bounceOffWalls(circle)) {
-      return
-    } 
-
-    for (let j = 0; j < gameState.circles.length; j++) {
-      other = gameState.circles[j]
-      if (i == j) continue
-
-      if (other.intersectsWithCircle(circle)) {
-        circle.vx *= -1
-        circle.vy *= -1
-        break
-      }
-    }
-  })
+  cleanup();
+  move();
+  collide(tick);
 }
 
-function bounceOffWalls(collider) {
-  if (collider.intersectsWithAxis("x", canvas.width)) {
-    collider.vx *= -1
-    return true
+function cleanup() {
+  gameState.circles = gameState.circles.filter((circle) => circle.alive);
+}
+
+function move() {
+  gameState.circles.forEach((c) => c.move());
+}
+
+function collide(tick) {
+  gameState.circles
+    .filter((c) => !c.isImmuneOnTick(tick, gameState.immuneTicks))
+    .forEach((circle, i) => {
+      if (bounceOffWalls(circle)) {
+        return;
+      }
+
+      for (let j = 0; j < gameState.circles.length; j++) {
+        other = gameState.circles[j];
+        if (i == j) continue;
+
+        if (circle.collide(other)) {
+          circle.lastCollision = tick;
+          break;
+        }
+      }
+    });
+}
+
+function bounceOffWalls(gameObject) {
+  if (gameObject.collider.intersectsWithAxis("x", canvas.width)) {
+    gameObject.onCollisionWithWall("x");
+    return true;
   }
 
-  if (collider.intersectsWithAxis("y", canvas.height)) {
-    collider.vy *= -1
-    return true
+  if (gameObject.collider.intersectsWithAxis("y", canvas.height)) {
+    gameObject.onCollisionWithWall("y");
+    return true;
   }
-  
-  return false
+
+  return false;
 }
 
 function run(tFrame) {
