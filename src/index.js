@@ -13,7 +13,7 @@ function generateObjects(objectGenerator, n) {
 }
 
 const gameState = {
-  immuneTicks: 20,
+  immuneTicks: 50,
   gameObjects: [],
 };
 
@@ -44,7 +44,7 @@ function move() {
 
 function collide(tick) {
   gameState.gameObjects
-    .filter((c) => !c.isImmuneOnTick(tick, gameState.immuneTicks))
+    // .filter((c) => !c.isImmuneOnTick(tick, gameState.immuneTicks))
     .forEach((object, i) => {
       if (bounceOffWalls(object)) {
         return;
@@ -103,9 +103,22 @@ function setup() {
   gameState.lastRender = gameState.lastTick;
   gameState.tickLength = 15; //ms
   const objectGenerator = new ObjectGenerator(canvas.width, canvas.height);
-  gameState.gameObjects = generateObjects(objectGenerator, 10);
+  gameState.gameObjects = generateObjects(objectGenerator, 20);
   console.log(gameState.gameObjects);
 }
 
+function keyDown(event) {
+  console.log(event);
+  if (event.key === " ") {
+    stopGame(gameState.stopCycle);
+  }
+  if (event.key === "n") {
+    console.log("here");
+    queueUpdates(1);
+    renderer.render();
+  }
+}
+
 setup();
+document.addEventListener("keydown", keyDown);
 run();

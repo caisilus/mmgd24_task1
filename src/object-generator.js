@@ -46,11 +46,9 @@ export default class ObjectGenerator {
 
   generateVelocity() {
     const angle = Math.random() * (2 * Math.PI);
-    const r = randomInt(1, 5);
+    const r = randomInt(2, 5);
     const vx = Math.floor(Math.cos(angle) * r);
     const vy = Math.floor(Math.sin(angle) * r);
-    // const vx = randomInt(-3, 3);
-    // const vy = randomInt(-3, 3);
     return [vx, vy];
   }
 }
