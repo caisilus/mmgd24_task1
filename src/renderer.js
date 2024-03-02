@@ -12,11 +12,9 @@ export default class Renderer {
     this.gameState.circles.forEach((circle) => {
       this.renderCircle(circle);
     });
-    this.gameState.polygons
-      // .filter((p) => p.alive)
-      .forEach((polygon) => {
-        this.renderPolygon(polygon);
-      });
+    this.gameState.polygons.forEach((polygon) => {
+      this.renderPolygon(polygon);
+    });
   }
 
   renderCircle(circle) {

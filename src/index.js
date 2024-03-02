@@ -38,6 +38,7 @@ function update(tick) {
 
 function cleanup() {
   gameState.circles = gameState.circles.filter((circle) => circle.alive);
+  gameState.polygons = gameState.polygons.filter((polygon) => polygon.alive);
 }
 
 function move() {

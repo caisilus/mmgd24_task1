@@ -25,7 +25,6 @@ export default class GameObject {
 
   collide(other) {
     if (!this.alive) return false;
-    if (!other.alive) return false;
     if (!this.collider.intersects(other.collider)) return false;
 
     this.onCollision(other);
