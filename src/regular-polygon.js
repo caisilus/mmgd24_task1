@@ -9,12 +9,10 @@ import {
 import Circle from "./circle";
 
 export default class RegularPolygon {
-  constructor(x, y, r, nVerts, vx, vy) {
+  constructor(x, y, r, nVerts) {
     this.x = x;
     this.y = y;
     this.r = r;
-    this.vx = vx;
-    this.vy = vy;
     this.nVerts = nVerts;
   }
 

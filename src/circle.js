@@ -1,12 +1,10 @@
 import { solveSquareEquation } from "./vector_utils";
 
 export default class Circle {
-  constructor(x, y, r, vx, vy) {
+  constructor(x, y, r) {
     this.x = x;
     this.y = y;
     this.r = r;
-    this.vx = vx;
-    this.vy = vy;
   }
 
   get center() {

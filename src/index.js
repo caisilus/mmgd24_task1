@@ -1,24 +1,20 @@
 import Rectangle from "./rectangle";
-import Circle from "./circle";
 import Renderer from "./renderer";
-import GameObject from "./game-object";
-import RegularPolygon from "./regular-polygon";
+import ObjectGenerator from "./object-generator";
 
 const canvas = document.getElementById("cnvs");
 
-const gameState = {
-  circles: [
-    new Circle(20, 100, 15, 2, 0),
-    //   new Circle(520, 100, 15, -2, 0),
-    //   new Circle(270, 350, 15, 0, -2),
-  ].map((circleCollider) => new GameObject(circleCollider, 3)),
-  // circles: [],
-  polygons: [
-    // new RegularPolygon(20, 100, 15, 6, 2, 0),
-    new RegularPolygon(520, 100, 15, 3, -2, 0),
-  ].map((polygonCollider) => new GameObject(polygonCollider, 3)),
+function generateObjects(objectGenerator, n) {
+  gameObjects = [];
+  for (let i = 0; i < n; i++) {
+    gameObjects.push(objectGenerator.generate());
+  }
+  return gameObjects;
+}
 
+const gameState = {
   immuneTicks: 20,
+  gameObjects: [],
 };
 
 const renderer = new Renderer(canvas, gameState);
@@ -37,26 +33,25 @@ function update(tick) {
 }
 
 function cleanup() {
-  gameState.circles = gameState.circles.filter((circle) => circle.alive);
-  gameState.polygons = gameState.polygons.filter((polygon) => polygon.alive);
+  gameState.gameObjects = gameState.gameObjects.filter(
+    (object) => object.alive
+  );
 }
 
 function move() {
-  gameState.circles.forEach((c) => c.move());
-  gameState.polygons.forEach((p) => p.move());
+  gameState.gameObjects.forEach((c) => c.move());
 }
 
 function collide(tick) {
-  const objects = [...gameState.circles, ...gameState.polygons];
-  objects
+  gameState.gameObjects
     .filter((c) => !c.isImmuneOnTick(tick, gameState.immuneTicks))
     .forEach((object, i) => {
       if (bounceOffWalls(object)) {
         return;
       }
 
-      for (let j = 0; j < objects.length; j++) {
-        other = objects[j];
+      for (let j = 0; j < gameState.gameObjects.length; j++) {
+        other = gameState.gameObjects[j];
         if (i == j) continue;
 
         if (object.collide(other)) {
@@ -107,6 +102,9 @@ function setup() {
   gameState.lastTick = performance.now();
   gameState.lastRender = gameState.lastTick;
   gameState.tickLength = 15; //ms
+  const objectGenerator = new ObjectGenerator(canvas.width, canvas.height);
+  gameState.gameObjects = generateObjects(objectGenerator, 10);
+  console.log(gameState.gameObjects);
 }
 
 setup();

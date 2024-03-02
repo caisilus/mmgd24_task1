@@ -7,9 +7,11 @@ function randomColor() {
 }
 
 export default class GameObject {
-  constructor(collider, numLifes, color) {
+  constructor(collider, numLifes, vx, vy, color) {
     this.collider = collider;
     this.numLifes = numLifes;
+    this.vx = vx;
+    this.vy = vy;
     if (color) {
       this.color = color;
     } else {
@@ -32,8 +34,8 @@ export default class GameObject {
   }
 
   onCollision(other) {
-    this.collider.vx *= -1;
-    this.collider.vy *= -1;
+    this.vx *= -1;
+    this.vy *= -1;
 
     this.numLifes--;
     if (this.numLifes == 0) {
@@ -44,15 +46,15 @@ export default class GameObject {
   }
 
   onCollisionWithWall(axis = "x") {
-    if (axis == "x") this.collider.vx *= -1;
-    else this.collider.vy *= -1;
+    if (axis == "x") this.vx *= -1;
+    else this.vy *= -1;
   }
 
   move() {
     if (!this.alive) return;
 
-    this.collider.x += this.collider.vx;
-    this.collider.y += this.collider.vy;
+    this.collider.x += this.vx;
+    this.collider.y += this.vy;
   }
 
   die() {

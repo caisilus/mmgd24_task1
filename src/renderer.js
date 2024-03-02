@@ -1,3 +1,5 @@
+import Circle from "./circle";
+
 export default class Renderer {
   constructor(canvas, gameState) {
     this.canvas = canvas;
@@ -9,11 +11,12 @@ export default class Renderer {
     // clear canvas
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.gameState.circles.forEach((circle) => {
-      this.renderCircle(circle);
-    });
-    this.gameState.polygons.forEach((polygon) => {
-      this.renderPolygon(polygon);
+    this.gameState.gameObjects.forEach((object) => {
+      if (object.collider instanceof Circle) {
+        this.renderCircle(object);
+      } else {
+        this.renderPolygon(object);
+      }
     });
   }
 
