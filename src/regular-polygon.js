@@ -65,7 +65,9 @@ export default class RegularPolygon {
     }
   }
 
-  intersectsWithCircle(circle) {}
+  intersectsWithCircle(circle) {
+    return circle.intersectsWithPolygon(this);
+  }
 
   intersectsWithRightPolygon(other) {
     for (const edge of this.edges) {

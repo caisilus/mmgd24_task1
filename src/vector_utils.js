@@ -38,3 +38,19 @@ export function projectFigureToNormal(figure, normal) {
 export function projectionsOverlap(proj1, proj2) {
   return proj1.min <= proj2.max && proj2.min <= proj1.max;
 }
+
+export function solveSquareEquation(a, b, c) {
+  const D = b ** 2 - 4 * a * c;
+
+  if (D < 0) return [];
+  if (D == 0) {
+    const root = -b / (2 * a);
+    return [root];
+  }
+  if (D > 0) {
+    const sqrtD = Math.sqrt(D);
+    const r1 = (-b + sqrtD) / (2 * a);
+    const r2 = (-b - sqrtD) / (2 * a);
+    return [r1, r2];
+  }
+}

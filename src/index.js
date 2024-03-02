@@ -7,14 +7,14 @@ import RegularPolygon from "./regular-polygon";
 const canvas = document.getElementById("cnvs");
 
 const gameState = {
-  // circles: [
-  //   new Circle(20, 100, 15, 2, 0),
-  //   new Circle(520, 100, 15, -2, 0),
-  //   new Circle(270, 350, 15, 0, -2),
-  // ].map((circleCollider) => new GameObject(circleCollider, 3)),
-  circles: [],
+  circles: [
+    new Circle(20, 100, 15, 2, 0),
+    //   new Circle(520, 100, 15, -2, 0),
+    //   new Circle(270, 350, 15, 0, -2),
+  ].map((circleCollider) => new GameObject(circleCollider, 3)),
+  // circles: [],
   polygons: [
-    new RegularPolygon(20, 100, 15, 6, 2, 0),
+    // new RegularPolygon(20, 100, 15, 6, 2, 0),
     new RegularPolygon(520, 100, 15, 3, -2, 0),
   ].map((polygonCollider) => new GameObject(polygonCollider, 3)),
 
