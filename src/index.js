@@ -2,15 +2,21 @@ import Rectangle from "./rectangle";
 import Circle from "./circle";
 import Renderer from "./renderer";
 import GameObject from "./game-object";
+import RegularPolygon from "./regular-polygon";
 
 const canvas = document.getElementById("cnvs");
 
 const gameState = {
-  circles: [
-    new Circle(20, 100, 15, 2, 0),
-    new Circle(520, 100, 15, -2, 0),
-    new Circle(270, 350, 15, 0, -2),
-  ].map((circleCollider) => new GameObject(circleCollider, 3)),
+  // circles: [
+  //   new Circle(20, 100, 15, 2, 0),
+  //   new Circle(520, 100, 15, -2, 0),
+  //   new Circle(270, 350, 15, 0, -2),
+  // ].map((circleCollider) => new GameObject(circleCollider, 3)),
+  circles: [],
+  polygons: [
+    new RegularPolygon(20, 100, 15, 6, 2, 0),
+    new RegularPolygon(520, 100, 15, 3, -2, 0),
+  ].map((polygonCollider) => new GameObject(polygonCollider, 3)),
 
   immuneTicks: 20,
 };
@@ -36,22 +42,24 @@ function cleanup() {
 
 function move() {
   gameState.circles.forEach((c) => c.move());
+  gameState.polygons.forEach((p) => p.move());
 }
 
 function collide(tick) {
-  gameState.circles
+  const objects = [...gameState.circles, ...gameState.polygons];
+  objects
     .filter((c) => !c.isImmuneOnTick(tick, gameState.immuneTicks))
-    .forEach((circle, i) => {
-      if (bounceOffWalls(circle)) {
+    .forEach((object, i) => {
+      if (bounceOffWalls(object)) {
         return;
       }
 
-      for (let j = 0; j < gameState.circles.length; j++) {
-        other = gameState.circles[j];
+      for (let j = 0; j < objects.length; j++) {
+        other = objects[j];
         if (i == j) continue;
 
-        if (circle.collide(other)) {
-          circle.lastCollision = tick;
+        if (object.collide(other)) {
+          object.lastCollision = tick;
           break;
         }
       }
